@@ -10,7 +10,7 @@ use pocketmine\utils\SingletonTrait;
 
 class AsyncMySQL extends PluginBase {
     use SingletonTrait;
-    private static $mysql;
+    private static $mysql = null;
 
     public function onEnable() : void {
         $this->getServer()->getPluginManager()->enablePlugin($this);
@@ -26,6 +26,13 @@ class AsyncMySQL extends PluginBase {
     public static function execute(array $queries) {
         self::$mysql->setQuery($queries);
         return self::$mysql->recv();
+    }
+
+    public static function createDB(string $dbname) : void {
+        if( is_null(self::$mysql) )
+            throw new \Exception("The SQL connection is not registered");
+        else
+            self::execute(["CREATE DATABASE ".$dbname]);
     }
 
 }

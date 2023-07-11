@@ -19,8 +19,11 @@ class Mysql implements Runnable {
             $this->taskQueue->run(array_shift($this->query));
             $data = [];
 
-            while( ($row = $this->taskQueue->getResult()->fetch_assoc()) ) 
-                $data[] = $row;
+            $res = $this->taskQueue->getResult();
+
+            if( is_object($res) )
+                while( ($row = $res->fetch_assoc()) ) 
+                    $data[] = $row;
 
             $result[] = $data;
         }
