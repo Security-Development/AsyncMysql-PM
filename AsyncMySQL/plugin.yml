@@ -1,0 +1,5 @@
+name: AsyncMySQL
+version: 23.07
+author: Anonymous
+main: plugin\AsyncMySQL
+api: 5.2.0
