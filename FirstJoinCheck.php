@@ -10,7 +10,7 @@ class example extends PluginBase implements Listener {
 
     public function onEnable() : void{
         $this->getServer()->getPluginManager()->registerEvents($this, $this);
-        AsyncMySQL::connectToMySQL('localhost', 'root', 'lee12345', 'test');
+        AsyncMySQL::connectToMySQL('localhost', 'root', 'pw', 'test');
         AsyncMySQL::createTable("player_connect", [
             'username' => 'VARCHAR(255)'
         ]);
