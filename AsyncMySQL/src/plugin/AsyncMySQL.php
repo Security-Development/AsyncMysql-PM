@@ -2,6 +2,7 @@
 
 namespace plugin;
 
+use mysqli_sql_exception;
 use plugin\thread\job\Connect;
 use plugin\thread\Mysql;
 
@@ -24,15 +25,29 @@ class AsyncMySQL extends PluginBase {
     }
 
     public static function execute(array $queries) {
-        self::$mysql->setQuery($queries);
-        return self::$mysql->recv();
-    }
-
-    public static function createDB(string $dbname) : void {
         if( is_null(self::$mysql) )
             throw new \Exception("The SQL connection is not registered");
         else
-            self::execute(["CREATE DATABASE ".$dbname]);
+            self::$mysql->setQuery($queries);
+        return self::$mysql->recv();
+    }
+
+    public static function createTable(string $tablename, array $columns) {
+        $query = "CREATE TABLE IF NOT EXISTS $tablename (";
+        $columnList = [];
+
+        foreach ($columns as $columnName => $columnType)
+            $columnList[] = "`$columnName` $columnType";
+
+        $query .= implode(', ', $columnList);
+        $query .= ")";
+
+        self::execute([$query]);
+
+    }
+
+    public static function createDB(string $dbname) : void {
+        self::execute(["CREATE DATABASE ".$dbname]);
     }
 
 }
